@@ -13,34 +13,46 @@ import javax.swing.JTextField;
  *
  * @author marcf
  */
-public class panelInferior extends JPanel{
+public class panelInferior extends JPanel {
+
     JButton botonMesclar = new JButton();
     JButton botonJugar = new JButton();
     JButton botonReiniciar = new JButton();
+    JButton botonPasar = new JButton();
+    JButton botonTornJug = new JButton();
     JTextField textoInf = new JTextField();
 
-
-    public panelInferior(){
+    public panelInferior() {
         this.setSize(1200, 50);
         this.setLayout(null);
         this.setBackground(Color.LIGHT_GRAY);
         initComponents();
     }
 
-    private void initComponents(){
+    private void initComponents() {
         botonMesclar.setText("Mescla");
         this.add(botonMesclar);
-        botonMesclar.setBounds(450,5,100,20);
+        botonMesclar.setBounds(450, 5, 100, 20);
 
         botonJugar.setText("Jugar");
         this.add(botonJugar);
-        botonJugar.setBounds(550,5,100,20);
+        botonJugar.setBounds(550, 5, 100, 20);
         botonJugar.setEnabled(false);
 
         botonReiniciar.setText("Reinicia");
         this.add(botonReiniciar);
-        botonReiniciar.setBounds(650,5,100,20);
+        botonReiniciar.setBounds(650, 5, 100, 20);
         botonReiniciar.setEnabled(false);
+
+        botonPasar.setText("Pasa");
+        this.add(botonPasar);
+        botonPasar.setBounds(550, 5, 100, 20);
+        botonPasar.setVisible(false);
+        
+        botonTornJug.setText("Torn del jugador");
+        this.add(botonTornJug);
+        botonTornJug.setBounds(550, 5, 100, 20);
+        botonTornJug.setVisible(false);
 
         textoInf.setText("Abans de jugar cal barallar!");
         this.add(textoInf);

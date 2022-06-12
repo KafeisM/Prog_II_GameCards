@@ -44,7 +44,7 @@ public class Joc {
         Palo pal = null;
         int valor;
 
-        for (int i = 0; i < 13 && !colocada; i++) {
+        for (int i = 0; i < 13 && !colocada ; i++) {
             c = munt.agafarCarta(i);
             valor = c.getValor();
             pal = c.getPalo();
@@ -70,6 +70,7 @@ public class Joc {
                 }
             }
         }
+        colocada = false;
     }
 
     public void colocarCarta(Carta c, Jugador munt) {
