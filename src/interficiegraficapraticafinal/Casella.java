@@ -45,9 +45,16 @@ public class Casella {
         g2d.draw(rec);
     }
     
-    void setCarta(Carta c){
+    public void setCarta(Carta c){
         this.ocupada = true;
         this.carta = c;
+    }
+    
+    public Carta getCarta(){
+        return carta;
+    }
+    public Rectangle2D.Float getRec() {
+        return rec;
     }
     
 }

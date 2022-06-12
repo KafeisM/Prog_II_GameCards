@@ -30,6 +30,13 @@ public class BarallaVisualizer extends JPanel{
             }
     }
     
+    public boolean comprovarclick(int i, int x, int y) {
+        return visu[i].getRec().contains(x, y);
+    }
+    
+    public Casella getCasella(int i) {
+        return visu[i];
+    }
     
         @Override
     public void paintComponent(Graphics g){

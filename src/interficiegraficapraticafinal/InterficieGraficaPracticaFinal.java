@@ -8,6 +8,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -17,7 +19,7 @@ import javax.swing.JOptionPane;
  *
  * @author marcf
  */
-public class InterficieGraficaPracticaFinal extends JFrame {
+public class InterficieGraficaPracticaFinal extends JFrame implements MouseListener, ActionListener {
 
     private Baralla baraja = generarBaralla();
     private Jugador jug1 = new Jugador();
@@ -26,6 +28,7 @@ public class InterficieGraficaPracticaFinal extends JFrame {
     private Jugador jug4 = new Jugador();
     private Joc tj = new Joc();
     private Boolean haGuanyat = false;
+    private Boolean torn = true;
     //declaración de los diferentes tableros
     private Tablero tauler = new Tablero();
     private Tablero taulerM = new Tablero();
@@ -40,7 +43,6 @@ public class InterficieGraficaPracticaFinal extends JFrame {
     private JLabel etiqJug2 = new JLabel();
     private JLabel etiqJug3 = new JLabel();
     private JLabel etiqPropia = new JLabel();
-    private Font font = new Font("Arial", Font.BOLD, 14);
 
     public InterficieGraficaPracticaFinal() {
         this.setSize(1212, 839);
@@ -82,44 +84,44 @@ public class InterficieGraficaPracticaFinal extends JFrame {
         //afegim el panell superior amb les caselles
         this.add(ps);
         ps.setBounds(0, -100, 1200, 300);
-        
+
+        //afegim el panell de botons inferior
+        this.add(pi);
+        pi.setBounds(0, 750, 1200, 50);
+
         //posam les fotos de la baralla ordenada i afegim el tauler inicial
         ponerFotosOrden();
         this.add(tauler);
         tauler.setBounds(0, 140, 1200, 500);
-        
+
         //afegim el tauler amb les cartes mesclades (no visible inicialment)
         this.add(taulerM);
         taulerM.setBounds(0, 140, 1200, 500);
         taulerM.setVisible(false);
-        
+
         //afegim el tauler buid on jugar (no visible inicialment)
         this.add(taulerJoc);
         taulerJoc.setBounds(0, 140, 1200, 500);
         taulerJoc.setVisible(false);
-        
+
         //configuració de la etiqueta inferior
         etiqPropia.setText("0");
         etiqPropia.setForeground(Color.white);
         etiqPropia.setFont(new java.awt.Font("Arial", Font.ITALIC + Font.BOLD, 40));
         this.add(etiqPropia);
-        
+
         etiqPropia.setBounds(42, 590, 50, 50);
         //afegim el visualizer de la baralla inferior (no visible inicialment)
         this.add(bv);
-        
+
         bv.setBounds(0, 520, 1200, 400);
         bv.setVisible(false);
-        
+
         //afegim el visualizer de dimensió 1
         this.add(bv2);
-        
+
         bv2.setBounds(3, 520, 1200, 400);
-        //afegim el panell de botons inferior
-        this.add(pi);
-        pi.setBounds(0, 750, 1200, 50);
-        
-        
+
         //mètodes de acció
         pi.botonMesclar.addActionListener(new ActionListener() {
             @Override
@@ -140,9 +142,11 @@ public class InterficieGraficaPracticaFinal extends JFrame {
             }
         });
 
+        bv.addMouseListener(this);
+
     }
 
-    private void ponerFotosOrden() { 
+    private void ponerFotosOrden() {
         for (int j = 0; j < 13; j++) {
             tauler.Posa(baraja.getCarta(j), 0, j);
         }
@@ -164,7 +168,7 @@ public class InterficieGraficaPracticaFinal extends JFrame {
     private void botonMesclar(java.awt.event.ActionEvent e) {
         tauler.setVisible(false);
         baraja.mesclar();
-        ponerFotosMezcladas();  
+        ponerFotosMezcladas();
         taulerM.setVisible(true);
         pi.botonJugar.setEnabled(true);
         pi.botonJugar.setBackground(Color.BLUE);
@@ -182,13 +186,13 @@ public class InterficieGraficaPracticaFinal extends JFrame {
         taulerJoc.setVisible(false);
         pi.botonMesclar.setVisible(true);
         pi.botonJugar.setText("Jugar");
-        
+
         //reiniciar munts de jugadors
         jug1 = new Jugador();
         jug2 = new Jugador();
         jug3 = new Jugador();
         jug4 = new Jugador();
-       
+
         //reinicair punts
         int puntosJug1 = jug2.getContador();
         etiqJug1.setText(Integer.toString(puntosJug1));
@@ -201,13 +205,17 @@ public class InterficieGraficaPracticaFinal extends JFrame {
         etiqJug3.setBounds(875, 15, 1200 / 13, 450 / 4);
         int puntosPropios = jug1.getContador();
         etiqPropia.setText(Integer.toString(puntosPropios));
-        
+
         haGuanyat = false;
         tj = new Joc();
 
+        taulerJoc = new Tablero();
+        taulerJoc.setBounds(0, 140, 1200, 500);
+        taulerJoc.setVisible(false);
+
     }
 
-    private void ponerFotosMezcladas() { 
+    private void ponerFotosMezcladas() {
         for (int j = 0; j < 13; j++) {
             taulerM.Posa(baraja.getCarta(j), 0, j);
         }
@@ -223,7 +231,7 @@ public class InterficieGraficaPracticaFinal extends JFrame {
         for (int j = 0; j < 13; j++) {
             taulerM.Posa(baraja.getCarta(j + 39), 3, j);
         }
-        
+
         this.repaint();
     }
 
@@ -286,20 +294,20 @@ public class InterficieGraficaPracticaFinal extends JFrame {
                 taulerJoc.Posa(fila4[i], 3, i);
             }
         }
+        this.repaint();
     }
 
     private void botonJugar(java.awt.event.ActionEvent e) {
-        
+
         ImageIcon icono = null;
-        Jugador [] jugadors = {jug1,jug2,jug3,jug4};
-        
+        Jugador[] jugadors = {jug1, jug2, jug3, jug4};
+
         repartir(baraja, jugadors);
-        System.out.println(jugadors[0].agafarCarta(0));
-        
+
         for (int i = 0; i < 13; i++) {
             bv.Posa(jug1.agafarCarta(i), i);
         }
-        
+
         Carta cartaGirada = new Carta(1, Palo.DIAMONDS, "Cartes/card_back_blue.png");
         bv.setVisible(true);
         taulerM.setVisible(false);
@@ -307,7 +315,7 @@ public class InterficieGraficaPracticaFinal extends JFrame {
         for (int i = 0; i < 3; i++) {
             ps.Posa(cartaGirada, i);
         }
-        
+
         int puntosJug1 = jug2.getContador();
         etiqJug1.setText(Integer.toString(puntosJug1));
         etiqJug1.setBounds(250, 15, 1200 / 13, 450 / 4);
@@ -324,26 +332,21 @@ public class InterficieGraficaPracticaFinal extends JFrame {
         pi.botonMesclar.setVisible(false);
         pi.botonJugar.setText("Passa");
 
-        System.out.println(haGuanyat);
-        while (!haGuanyat) {
+        
             
-            for (int i = 0; (i < 4) && (!haGuanyat); i++) {
+            puntosPropios = jug1.getContador();
+            etiqPropia.setText(Integer.toString(puntosPropios));
+            if (jug1.getContador() == 0) {
+                haGuanyat = true;
+                icono = new ImageIcon("Cartes/Jug0Riu.png");
+                JOptionPane.showMessageDialog(null, "HAS GUANYAT! ", "Final de partida", JOptionPane.INFORMATION_MESSAGE, icono);
+            }
+     
+           
+            for (int i = 0; i < 3; i++) {
                 switch (i) {
                     case 0:
-                        
-                        tj.jugar(jug1);
-                        mostrarEstadoPartida();
-                        puntosPropios = jug1.getContador();
-                        etiqPropia.setText(Integer.toString(puntosPropios));
-                        if (jug1.getContador() == 0) {
-                            haGuanyat = true;
-                            icono = new ImageIcon("Cartes/Jug0Riu.png");
-                            JOptionPane.showMessageDialog(null, "HAS GUANYAT! ", "Final de partida", JOptionPane.INFORMATION_MESSAGE ,icono);
-                        }
 
-                        break;
-                    case 1:
-                       
                         tj.jugar(jug2);
                         mostrarEstadoPartida();
                         puntosJug1 = jug2.getContador();
@@ -351,12 +354,12 @@ public class InterficieGraficaPracticaFinal extends JFrame {
                         if (jug2.getContador() == 0) {
                             haGuanyat = true;
                             icono = new ImageIcon("Cartes/Jug1Riu.png");
-                            JOptionPane.showMessageDialog(null, "HA GUANYAT EL JUGADOR 1!", "Final de partida", JOptionPane.INFORMATION_MESSAGE ,icono);
+                            JOptionPane.showMessageDialog(null, "HA GUANYAT EL JUGADOR 1!", "Final de partida", JOptionPane.INFORMATION_MESSAGE, icono);
                         }
 
                         break;
-                    case 2:
-                        
+                    case 1:
+
                         tj.jugar(jug3);
                         mostrarEstadoPartida();
                         puntosJug2 = jug3.getContador();
@@ -364,12 +367,12 @@ public class InterficieGraficaPracticaFinal extends JFrame {
                         if (jug3.getContador() == 0) {
                             haGuanyat = true;
                             icono = new ImageIcon("Cartes/Jug2Riu.png");
-                            JOptionPane.showMessageDialog(null, "HA GUANYAT EL JUGADOR 2!", "Final de partida", JOptionPane.INFORMATION_MESSAGE ,icono);
+                            JOptionPane.showMessageDialog(null, "HA GUANYAT EL JUGADOR 2!", "Final de partida", JOptionPane.INFORMATION_MESSAGE, icono);
                         }
 
                         break;
-                    case 3:
-                        
+                    case 2:
+
                         tj.jugar(jug4);
                         mostrarEstadoPartida();
                         puntosJug3 = jug4.getContador();
@@ -377,49 +380,17 @@ public class InterficieGraficaPracticaFinal extends JFrame {
                         if (jug4.getContador() == 0) {
                             haGuanyat = true;
                             icono = new ImageIcon("Cartes/Jug3Riu.png");
-                            JOptionPane.showMessageDialog(null, "HA GUANYAT EL JUGADOR 3! ", "Final de partida", JOptionPane.INFORMATION_MESSAGE ,icono);
+                            JOptionPane.showMessageDialog(null, "HA GUANYAT EL JUGADOR 3! ", "Final de partida", JOptionPane.INFORMATION_MESSAGE, icono);
                         }
 
                         break;
                 }
             }
-        }
-        System.out.println(jug1.getContador());
+            torn = true;
+        
+
     }
 
-    /*private void ponerFotosMezcladas(){
-        Random ran = new Random();
-        int aux;
-        String s = "";
-        for (int j = 1; j < 14; j++){
-            aux = ran.nextInt(12);
-            s += "Cartes/" + (aux + 1) + "_of_clubs.png";
-            taulerM.Posa(s, 0, j - 1);
-            s = "";
-        }
-        
-        for (int j = 1; j < 14; j++){
-            aux = ran.nextInt(12);
-            s += "Cartes/" + (aux+1) + "_of_diamonds.png";
-            taulerM.Posa(s, 1, j - 1);
-            s = "";
-        }
-        
-        for (int j = 1; j < 14; j++){
-            aux = ran.nextInt(12);
-            s += "Cartes/" + (aux+1)  + "_of_hearts.png";
-            taulerM.Posa(s, 2, j - 1);
-            s = "";
-        }
-        
-        for (int j = 1; j < 14; j++){
-            aux = ran.nextInt(12);
-            s += "Cartes/" + (aux+1) + "_of_spades.png";
-            taulerM.Posa(s, 3, j - 1);
-            s = "";
-        }
-                
-    }*/
     private static Baralla generarBaralla() {
 
         Baralla bar = new Baralla();
@@ -460,5 +431,55 @@ public class InterficieGraficaPracticaFinal extends JFrame {
         }
 
         return bar;
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        int x = 0, y = 0, i = 0;
+        int aux1, aux2;
+        x = e.getX();
+        y = e.getY();
+        boolean flag = false;
+        for (i = 0; i < 13 && !flag; i++) {
+            flag = bv.comprovarclick(i, x, y);
+        }
+        i--;
+
+        if (torn) {
+            Casella cas = bv.getCasella(i);
+            Carta c = cas.getCarta();
+            System.out.println(c);
+            tj.colocarCarta(c, jug1);
+            mostrarEstadoPartida();
+            if (tj.getColocada()) {
+                torn = false;
+            }
+        }
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
     }
 }

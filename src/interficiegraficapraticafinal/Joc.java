@@ -23,6 +23,8 @@ public class Joc {
     private static Carta[] jocHearts;
     private static boolean[] ocupadaHearts;
 
+    private static Boolean colocada = false;
+
     public Joc() {
         jocClubs = new Carta[13];
         ocupadaClubs = new boolean[13];
@@ -42,7 +44,7 @@ public class Joc {
         Palo pal = null;
         int valor;
 
-        for (int i = 0; i < 13; i++) {
+        for (int i = 0; i < 13 && !colocada; i++) {
             c = munt.agafarCarta(i);
             valor = c.getValor();
             pal = c.getPalo();
@@ -50,7 +52,7 @@ public class Joc {
             if (null != pal) {
                 switch (pal) {
                     case CLUBS:
-                        ComprovarCarta(jocClubs, ocupadaClubs, valor, munt, c);                        
+                        ComprovarCarta(jocClubs, ocupadaClubs, valor, munt, c);
                         break;
                     case DIAMONDS:
 
@@ -61,7 +63,6 @@ public class Joc {
                         ComprovarCarta(jocHearts, ocupadaHearts, valor, munt, c);
                         break;
                     case SPADES:
-
                         ComprovarCarta(jocSpades, ocupadaSpades, valor, munt, c);
                         break;
                     default:
@@ -71,12 +72,43 @@ public class Joc {
         }
     }
 
+    public void colocarCarta(Carta c, Jugador munt) {
+        Palo pal = c.getPalo();
+        int valor = c.getValor();
+
+        if (null != pal) {
+            switch (pal) {
+                case CLUBS:
+                    ComprovarCarta(jocClubs, ocupadaClubs, valor, munt, c);
+                    break;
+                case DIAMONDS:
+                    ComprovarCarta(jocDiamonds, ocupadaDiamonds, valor, munt, c);
+                    System.out.println(pal + " " + valor);
+                    break;
+                case HEARTS:
+
+                    ComprovarCarta(jocHearts, ocupadaHearts, valor, munt, c);
+                    System.out.println(pal + " " + valor);
+                    break;
+                case SPADES:
+                    ComprovarCarta(jocSpades, ocupadaSpades, valor, munt, c);
+                    System.out.println(pal + " " + valor);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+    }
+
     public void ComprovarCarta(Carta[] Joc, boolean[] Ocupada, int valor, Jugador munt, Carta c) {
+        colocada = false;
 
         if (valor == 7 && Ocupada[6] == false) {
             Joc[6] = c;
             Ocupada[6] = true;
             munt.modCont();
+            colocada = true;
             return;
         } else {
             for (int j = 0; j < Joc.length; j++) {
@@ -86,6 +118,7 @@ public class Joc {
                             Joc[j - 1] = c;
                             Ocupada[j - 1] = true;
                             munt.modCont();
+                            colocada = true;
                             return;
                         }
                     } else if ((Ocupada[j] == true) && (Ocupada[j + 1] == false)) {
@@ -93,6 +126,7 @@ public class Joc {
                             Joc[j + 1] = c;
                             Ocupada[j + 1] = true;
                             munt.modCont();
+                            colocada = true;
                             return;
                         }
                     }
@@ -102,8 +136,11 @@ public class Joc {
         }
     }
 
+    public static Boolean getColocada() {
+        return colocada;
+    }
 
-   public static Carta[] getJocClubs() {
+    public static Carta[] getJocClubs() {
         return jocClubs;
     }
 
@@ -118,9 +155,9 @@ public class Joc {
     public static Carta[] getJocHearts() {
         return jocHearts;
     }
-    
-    public static void reiniciar(){
-        
+
+    public static void reiniciar() {
+
     }
 
 }
