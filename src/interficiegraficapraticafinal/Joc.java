@@ -118,5 +118,9 @@ public class Joc {
     public static Carta[] getJocHearts() {
         return jocHearts;
     }
+    
+    public static void reiniciar(){
+        
+    }
 
 }

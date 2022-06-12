@@ -31,17 +31,17 @@ public class Jugador {
         --cnt;
     }
 
-    @Override
-    public String toString() {
-        Carta c;
-        String output = "";
-
-        for (int i = 0; i < ind; i++) {
-            c = munt[i];
-            output += c.toString() + "\n";
-        }
-
-        return output;
-
-    }
+//    @Override
+//    public String toString() {
+//        Carta c;
+//        String output = "";
+//
+//        for (int i = 0; i < ind; i++) {
+//            c = munt[i];
+//            output += c.toString() + "\n";
+//        }
+//
+//        return output;
+//
+//    }
 }
