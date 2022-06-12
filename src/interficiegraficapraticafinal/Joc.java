@@ -103,7 +103,7 @@ public class Joc {
     }
 
     public void ComprovarCarta(Carta[] Joc, boolean[] Ocupada, int valor, Jugador munt, Carta c) {
-        colocada = false;
+        
 
         if (valor == 7 && Ocupada[6] == false) {
             Joc[6] = c;

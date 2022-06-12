@@ -29,6 +29,7 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
     private Joc tj = new Joc();
     private Boolean haGuanyat = false;
     private Boolean torn = true;
+    private ImageIcon icono = null;
     //declaración de los diferentes tableros
     private Tablero tauler = new Tablero();
     private Tablero taulerM = new Tablero();
@@ -233,10 +234,20 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
         torn = false;
         pi.botonPasar.setVisible(false);
         pi.botonTornJug.setVisible(true);
+        comprovarJoc();
+    }
+
+    private void comprovarJoc() {
+        int puntosPropios = jug1.getContador();
+        etiqPropia.setText(Integer.toString(puntosPropios));
+        if (jug1.getContador() == 0) {
+            haGuanyat = true;
+            icono = new ImageIcon("Cartes/Jug0Riu.png");
+            JOptionPane.showMessageDialog(null, "HAS GUANYAT! ", "Final de partida", JOptionPane.INFORMATION_MESSAGE, icono);
+        }
     }
 
     private void botonTornJug(java.awt.event.ActionEvent e) {
-        ImageIcon icono = null;
 
         int puntosJug1 = jug2.getContador();
         etiqJug1.setText(Integer.toString(puntosJug1));
@@ -250,7 +261,7 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
         for (int i = 0; i < 3; i++) {
             switch (i) {
                 case 0:
-                    System.out.println("H");
+
                     tj.jugar(jug2);
                     mostrarEstadoPartida();
                     puntosJug1 = jug2.getContador();
@@ -263,7 +274,7 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
 
                     break;
                 case 1:
-                    System.out.println("D");
+
                     tj.jugar(jug3);
                     mostrarEstadoPartida();
                     puntosJug2 = jug3.getContador();
@@ -276,7 +287,7 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
 
                     break;
                 case 2:
-                    System.out.println("P");
+
                     tj.jugar(jug4);
                     mostrarEstadoPartida();
                     puntosJug3 = jug4.getContador();
@@ -412,14 +423,6 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
         pi.botonJugar.setVisible(false);
         pi.botonPasar.setVisible(true);
 
-        puntosPropios = jug1.getContador();
-        etiqPropia.setText(Integer.toString(puntosPropios));
-        if (jug1.getContador() == 0) {
-            haGuanyat = true;
-            icono = new ImageIcon("Cartes/Jug0Riu.png");
-            JOptionPane.showMessageDialog(null, "HAS GUANYAT! ", "Final de partida", JOptionPane.INFORMATION_MESSAGE, icono);
-        }
-
     }
 
     private static Baralla generarBaralla() {
@@ -493,6 +496,8 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
             tj.colocarCarta(c, jug1);
             mostrarEstadoPartida();
             if (tj.getColocada()) {
+                comprovarJoc();
+                bv.modCasella(i);
                 pi.botonPasar.setVisible(false);
                 pi.botonTornJug.setVisible(true);
                 torn = false;

@@ -53,6 +53,7 @@ public class Casella {
     public Carta getCarta(){
         return carta;
     }
+    
     public Rectangle2D.Float getRec() {
         return rec;
     }
