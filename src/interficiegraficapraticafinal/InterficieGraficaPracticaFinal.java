@@ -29,6 +29,7 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
     private Joc tj = new Joc();
     private Boolean haGuanyat = false;
     private Boolean torn = true;
+    private int tornJugs = 0;
     private ImageIcon icono = null;
     //declaración de los diferentes tableros
     private Tablero tauler = new Tablero();
@@ -248,7 +249,7 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
     }
 
     private void botonTornJug(java.awt.event.ActionEvent e) {
-
+        
         int puntosJug1 = jug2.getContador();
         etiqJug1.setText(Integer.toString(puntosJug1));
         etiqJug1.setBounds(250, 15, 1200 / 13, 450 / 4);
@@ -258,52 +259,57 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
         int puntosJug3 = jug4.getContador();
         etiqJug3.setText(Integer.toString(puntosJug3));
         etiqJug3.setBounds(875, 15, 1200 / 13, 450 / 4);
-        for (int i = 0; i < 3; i++) {
-            switch (i) {
-                case 0:
 
-                    tj.jugar(jug2);
-                    mostrarEstadoPartida();
-                    puntosJug1 = jug2.getContador();
-                    etiqJug1.setText(Integer.toString(puntosJug1));
-                    if (jug2.getContador() == 0) {
-                        haGuanyat = true;
-                        icono = new ImageIcon("Cartes/Jug1Riu.png");
-                        JOptionPane.showMessageDialog(null, "HA GUANYAT EL JUGADOR 1!", "Final de partida", JOptionPane.INFORMATION_MESSAGE, icono);
-                    }
+        switch (tornJugs) {
+            case 0:
+                pi.textoInf.setText("Torn del Jugador 1");
+                tj.jugar(jug2);
+                mostrarEstadoPartida();
+                puntosJug1 = jug2.getContador();
+                etiqJug1.setText(Integer.toString(puntosJug1));
+                if (jug2.getContador() == 0) {
+                    haGuanyat = true;
+                    icono = new ImageIcon("Cartes/Jug1Riu.png");
+                    JOptionPane.showMessageDialog(null, "HA GUANYAT EL JUGADOR 1!", "Final de partida", JOptionPane.INFORMATION_MESSAGE, icono);
+                }
+                tornJugs++;
 
-                    break;
-                case 1:
+                break;
+            case 1:
+                pi.textoInf.setText("Torn del Jugador 2");
+                tj.jugar(jug3);
+                mostrarEstadoPartida();
+                puntosJug2 = jug3.getContador();
+                etiqJug2.setText(Integer.toString(puntosJug2));
+                if (jug3.getContador() == 0) {
+                    haGuanyat = true;
+                    icono = new ImageIcon("Cartes/Jug2Riu.png");
+                    JOptionPane.showMessageDialog(null, "HA GUANYAT EL JUGADOR 2!", "Final de partida", JOptionPane.INFORMATION_MESSAGE, icono);
+                }
+                tornJugs++;
 
-                    tj.jugar(jug3);
-                    mostrarEstadoPartida();
-                    puntosJug2 = jug3.getContador();
-                    etiqJug2.setText(Integer.toString(puntosJug2));
-                    if (jug3.getContador() == 0) {
-                        haGuanyat = true;
-                        icono = new ImageIcon("Cartes/Jug2Riu.png");
-                        JOptionPane.showMessageDialog(null, "HA GUANYAT EL JUGADOR 2!", "Final de partida", JOptionPane.INFORMATION_MESSAGE, icono);
-                    }
+                break;
+            case 2:
+                pi.textoInf.setText("Torn del Jugador 3");
+                tj.jugar(jug4);
+                mostrarEstadoPartida();
+                puntosJug3 = jug4.getContador();
+                etiqJug3.setText(Integer.toString(puntosJug3));
+                if (jug4.getContador() == 0) {
+                    haGuanyat = true;
+                    icono = new ImageIcon("Cartes/Jug3Riu.png");
+                    JOptionPane.showMessageDialog(null, "HA GUANYAT EL JUGADOR 3! ", "Final de partida", JOptionPane.INFORMATION_MESSAGE, icono);
+                }
+                tornJugs = 0;
+                torn = true;
+                pi.botonTornJug.setVisible(false);
+                pi.botonPasar.setVisible(true);
 
-                    break;
-                case 2:
-
-                    tj.jugar(jug4);
-                    mostrarEstadoPartida();
-                    puntosJug3 = jug4.getContador();
-                    etiqJug3.setText(Integer.toString(puntosJug3));
-                    if (jug4.getContador() == 0) {
-                        haGuanyat = true;
-                        icono = new ImageIcon("Cartes/Jug3Riu.png");
-                        JOptionPane.showMessageDialog(null, "HA GUANYAT EL JUGADOR 3! ", "Final de partida", JOptionPane.INFORMATION_MESSAGE, icono);
-                    }
-
-                    break;
-            }
+                break;
         }
-        torn = true;
-        pi.botonTornJug.setVisible(false);
-        pi.botonPasar.setVisible(true);
+
+//        pi.botonTornJug.setVisible(false);
+//        pi.botonPasar.setVisible(true);
     }
 
     private void ponerFotosMezcladas() {
@@ -479,6 +485,33 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        try {
+            int posicio = retornarPos(e);
+            if (torn) {
+                Casella cas = bv.getCasella(posicio);
+                Carta c = cas.getCarta();
+                System.out.println(c);
+                tj.colocarCarta(c, jug1);
+                mostrarEstadoPartida();
+
+                //comprovar si la carta ha estat colocada
+                if (tj.getColocada()) {
+                    comprovarJoc();
+                    bv.modCasella(posicio);
+                    pi.botonPasar.setVisible(false);
+                    pi.botonTornJug.setVisible(true);
+                    torn = false;
+                    tj.resetColocada();
+                }
+            }
+
+        }catch(NullPointerException ex){
+            System.out.println("Carta ja possada");
+        }
+
+    }
+
+    private int retornarPos(MouseEvent e) {
         int x = 0, y = 0, i = 0;
         int aux1, aux2;
         x = e.getX();
@@ -488,22 +521,7 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
             flag = bv.comprovarclick(i, x, y);
         }
         i--;
-
-        if (torn) {
-            Casella cas = bv.getCasella(i);
-            Carta c = cas.getCarta();
-            System.out.println(c);
-            tj.colocarCarta(c, jug1);
-            mostrarEstadoPartida();
-            if (tj.getColocada()) {
-                comprovarJoc();
-                bv.modCasella(i);
-                pi.botonPasar.setVisible(false);
-                pi.botonTornJug.setVisible(true);
-                torn = false;
-            }
-        }
-
+        return i;
     }
 
     @Override

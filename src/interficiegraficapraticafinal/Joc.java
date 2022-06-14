@@ -39,44 +39,40 @@ public class Joc {
         ocupadaHearts = new boolean[13];
     }
 
+    //comprovar tota la baralla 
     public void jugar(Jugador munt) {
         Carta c = null;
         Palo pal = null;
         int valor;
 
-        for (int i = 0; i < 13 && !colocada ; i++) {
+        for (int i = 0; i < 13 && !colocada; i++) {
             c = munt.agafarCarta(i);
             valor = c.getValor();
             pal = c.getPalo();
 
-            if (null != pal) {
-                switch (pal) {
-                    case CLUBS:
-                        ComprovarCarta(jocClubs, ocupadaClubs, valor, munt, c);
-                        break;
-                    case DIAMONDS:
-
-                        ComprovarCarta(jocDiamonds, ocupadaDiamonds, valor, munt, c);
-                        break;
-                    case HEARTS:
-
-                        ComprovarCarta(jocHearts, ocupadaHearts, valor, munt, c);
-                        break;
-                    case SPADES:
-                        ComprovarCarta(jocSpades, ocupadaSpades, valor, munt, c);
-                        break;
-                    default:
-                        break;
-                }
-            }
+            selecionarPalo(pal, valor, munt, c);
         }
+
+        if (!colocada) {
+            System.out.println("no se ha colocat cap carta");
+        }
+        if(c == null){
+            System.out.println("error");
+        }
+
         colocada = false;
     }
 
+    //comprovar nomes una carta pasada per parametre
     public void colocarCarta(Carta c, Jugador munt) {
         Palo pal = c.getPalo();
         int valor = c.getValor();
 
+        selecionarPalo(pal, valor, munt, c);
+
+    }
+
+    private void selecionarPalo(Palo pal, int valor, Jugador munt, Carta c) {
         if (null != pal) {
             switch (pal) {
                 case CLUBS:
@@ -84,50 +80,54 @@ public class Joc {
                     break;
                 case DIAMONDS:
                     ComprovarCarta(jocDiamonds, ocupadaDiamonds, valor, munt, c);
-                    System.out.println(pal + " " + valor);
                     break;
                 case HEARTS:
 
                     ComprovarCarta(jocHearts, ocupadaHearts, valor, munt, c);
-                    System.out.println(pal + " " + valor);
                     break;
                 case SPADES:
                     ComprovarCarta(jocSpades, ocupadaSpades, valor, munt, c);
-                    System.out.println(pal + " " + valor);
                     break;
                 default:
                     break;
             }
         }
-
     }
 
     public void ComprovarCarta(Carta[] Joc, boolean[] Ocupada, int valor, Jugador munt, Carta c) {
-        
 
         if (valor == 7 && Ocupada[6] == false) {
             Joc[6] = c;
             Ocupada[6] = true;
             munt.modCont();
             colocada = true;
+            System.out.println("Se ha colocat " + c);
             return;
         } else {
+            //si entra al else
             for (int j = 0; j < Joc.length; j++) {
                 if ((j != 0) && (j != 12)) {
+                    //si la posicio anterior esta lliure
                     if ((Ocupada[j] == true) && (Ocupada[j - 1] == false)) {
                         if (valor == j) {
                             Joc[j - 1] = c;
                             Ocupada[j - 1] = true;
                             munt.modCont();
                             colocada = true;
+                            System.out.println("Se ha colocat " + c);
                             return;
                         }
-                    } else if ((Ocupada[j] == true) && (Ocupada[j + 1] == false)) {
+                    } 
+                    //si la posicio posterior esta lliure
+                    if ((Ocupada[j] == true) && (Ocupada[j + 1] == false)) {
+                        //no entra a este if 
                         if (valor == j + 2) {
+
                             Joc[j + 1] = c;
                             Ocupada[j + 1] = true;
                             munt.modCont();
                             colocada = true;
+                            System.out.println("Se ha colocat " + c);
                             return;
                         }
                     }
@@ -135,6 +135,7 @@ public class Joc {
                 }
             }
         }
+
     }
 
     public static Boolean getColocada() {
@@ -156,9 +157,9 @@ public class Joc {
     public static Carta[] getJocHearts() {
         return jocHearts;
     }
-
-    public static void reiniciar() {
-
+    
+    public static void resetColocada(){
+        colocada = false;
     }
 
 }

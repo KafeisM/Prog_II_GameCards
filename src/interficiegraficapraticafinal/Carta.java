@@ -43,8 +43,6 @@ public class Carta {
         return source;
     }
     
-    
-    
     @Override
     public String toString() {
         return "Carta{" + "palo=" + palo + ", valor=" + valor + '}';
