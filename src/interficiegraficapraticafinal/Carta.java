@@ -45,7 +45,7 @@ public class Carta {
     
     @Override
     public String toString() {
-        return "Carta{" + "palo=" + palo + ", valor=" + valor + '}';
+        return "{"  + valor + ", " + palo + '}';
     }
 
     void paintComponent(Graphics g, float x, float y){

@@ -32,16 +32,16 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
     private Boolean torn = true;
     private int tornJugs = 0;
     private ImageIcon icono = null;
-    //declaración de los diferentes tableros
+    //declaració de els diferents taulers 
     private Tablero tauler = new Tablero();
     private Tablero taulerM = new Tablero();
     private Tablero taulerJoc = new Tablero();
-    //declaración de los paneles
+    //declaració de els panells
     private panelInferior pi = new panelInferior();
     private BarallaVisualizer bv = new BarallaVisualizer(13);
     private BarallaVisualizer bv2 = new BarallaVisualizer(1);
     private panelSuperior ps = new panelSuperior();
-    //declaración de etiquetas para las puntuaciones
+    //declaració de les etiquetes per les puntuacions
     private JLabel etiqJug1 = new JLabel();
     private JLabel etiqJug2 = new JLabel();
     private JLabel etiqJug3 = new JLabel();
@@ -50,7 +50,6 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
     public InterficieGraficaPracticaFinal() {
         this.setSize(1212, 839);
         this.setLayout(null);
-        //this.setLayout(new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS));
         this.getContentPane().setBackground(new Color(42, 100, 25));
         this.setTitle("Joc del 7");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -182,6 +181,7 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
 
     }
 
+    //accio de mesclar la baralla, tambe se activara la opcio de iniciar el joc i reiniciar
     private void botonMesclar(java.awt.event.ActionEvent e) {
         tauler.setVisible(false);
         baraja.mesclar();
@@ -193,7 +193,10 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
         pi.textoInf.setText("La baralla està mesclada");
     }
 
+    //accions necesaries per reinicar una partida, torar a un estat inicial
     private void botonReiniciar(java.awt.event.ActionEvent e) {
+
+        //accions per restaurar informacio de la interficie (botons)
         taulerM.setVisible(false);
         tauler.setVisible(true);
         pi.botonJugar.setEnabled(false);
@@ -213,39 +216,36 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
         jug3 = new Jugador();
         jug4 = new Jugador();
 
-        //reiniciar el tauler
-        for(int i = 0; i < 4; i++){
-            for(int j = 0; j < 13; j++){
+        //reiniciar el tauler de joc
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 13; j++) {
                 taulerJoc.reiniciarTauler(i, j);
             }
         }
         taulerJoc.setVisible(false);
-        
-        //resetear torn
+
+        //resetejar el joc
+        haGuanyat = false;
+        tj = new Joc();
+
+        //resetejar torns
         torn = true;
         tornJugs = 0;
-        
+
         //reinicair punts
         int puntosJug1 = jug2.getContador();
         etiqJug1.setText(Integer.toString(puntosJug1));
-        //etiqJug1.setBounds(250, 15, 1200 / 13, 450 / 4);
         int puntosJug2 = jug3.getContador();
         etiqJug2.setText(Integer.toString(puntosJug2));
-        //etiqJug2.setBounds(565, 15, 1200 / 13, 450 / 4);
         int puntosJug3 = jug4.getContador();
         etiqJug3.setText(Integer.toString(puntosJug3));
-        //etiqJug3.setBounds(875, 15, 1200 / 13, 450 / 4);
         int puntosPropios = jug1.getContador();
         etiqPropia.setText(Integer.toString(puntosPropios));
 
         //llevar foto carta girada
-        for(int i = 0; i <3; i++){
+        for (int i = 0; i < 3; i++) {
             ps.modCasella(i);
         }
-        
-        haGuanyat = false;
-        tj = new Joc();
-
 
     }
 
@@ -268,22 +268,19 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
     }
 
     private void botonTornJug(java.awt.event.ActionEvent e) {
-        
+
         int puntosJug1 = jug2.getContador();
         etiqJug1.setText(Integer.toString(puntosJug1));
-        etiqJug1.setBounds(250, 15, 1200 / 13, 450 / 4);
         int puntosJug2 = jug3.getContador();
         etiqJug2.setText(Integer.toString(puntosJug2));
-        etiqJug2.setBounds(565, 15, 1200 / 13, 450 / 4);
         int puntosJug3 = jug4.getContador();
         etiqJug3.setText(Integer.toString(puntosJug3));
-        etiqJug3.setBounds(875, 15, 1200 / 13, 450 / 4);
 
         switch (tornJugs) {
             case 0:
-                pi.textoInf.setText("Torn del Jugador 1"); 
+                pi.textoInf.setText("Torn del Jugador 1");
                 tj.jugar(jug2);
-                mostrarEstadoPartida();
+                mostrarEstadoPartida(1);
                 puntosJug1 = jug2.getContador();
                 etiqJug1.setText(Integer.toString(puntosJug1));
                 if (jug2.getContador() == 0) {
@@ -297,7 +294,7 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
             case 1:
                 pi.textoInf.setText("Torn del Jugador 2");
                 tj.jugar(jug3);
-                mostrarEstadoPartida();
+                mostrarEstadoPartida(2);
                 puntosJug2 = jug3.getContador();
                 etiqJug2.setText(Integer.toString(puntosJug2));
                 if (jug3.getContador() == 0) {
@@ -311,7 +308,7 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
             case 2:
                 pi.textoInf.setText("Torn del Jugador 3");
                 tj.jugar(jug4);
-                mostrarEstadoPartida();
+                mostrarEstadoPartida(3);
                 puntosJug3 = jug4.getContador();
                 etiqJug3.setText(Integer.toString(puntosJug3));
                 if (jug4.getContador() == 0) {
@@ -327,8 +324,6 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
                 break;
         }
 
-//        pi.botonTornJug.setVisible(false);
-//        pi.botonPasar.setVisible(true);
     }
 
     private void ponerFotosMezcladas() {
@@ -383,7 +378,7 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
 
     }
 
-    private void mostrarEstadoPartida() {
+    private void mostrarEstadoPartida(int jug) {
         Carta[] fila1 = tj.getJocClubs();
         Carta[] fila2 = tj.getJocDiamonds();
         Carta[] fila3 = tj.getJocHearts();
@@ -410,16 +405,19 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
                 taulerJoc.Posa(fila4[i], 3, i);
             }
         }
-        //if (tj.getColocada()){
-        pi.textoInf.setText("S'ha colocat la carta: " + tj.devolverCartaColocada());  
-        if (tj.getAux()){
+
+        //actualitzar panell de informacio
+        if (tj.getAux()) {
             pi.textoInf.setText("El jugador ha passat");
+        } else {
+            if (jug == 0) {
+                pi.textoInf.setText("Has colocat la carta " + tj.devolverCartaColocada());
+            } else {
+                pi.textoInf.setText("El jugador " + jug + " ha colocat la carta " + tj.devolverCartaColocada());
+            }
+
         }
-        //} /*else {
-            //pi.textoInf.setText("El jugador ha passat");
-        //}*/
-        
-        
+
         this.repaint();
     }
 
@@ -516,9 +514,8 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
             if (torn) {
                 Casella cas = bv.getCasella(posicio);
                 Carta c = cas.getCarta();
-                System.out.println(c);
                 tj.colocarCarta(c, jug1);
-                mostrarEstadoPartida();
+                mostrarEstadoPartida(0);
 
                 //comprovar si la carta ha estat colocada
                 if (tj.getColocada()) {
@@ -530,10 +527,11 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
                     tj.resetColocada();
                 } else {
                     Toolkit.getDefaultToolkit().beep();
+                    pi.textoInf.setText("Moviment incorrecte");
                 }
             }
 
-        }catch(NullPointerException ex){
+        } catch (NullPointerException ex) {
             System.out.println("Carta ja possada");
         }
 

@@ -6,7 +6,7 @@ package interficiegraficapraticafinal;
 
 /**
  *
- * @author Usuario
+ * @author jordi
  */
 public class Joc {
     

@@ -1,5 +1,9 @@
 package interficiegraficapraticafinal;
 
+/**
+ *
+ * @author jordi
+ */
 public class Jugador {
 
     //Un jugador consta de 13 cartes i un contador de cartes
@@ -26,8 +30,8 @@ public class Jugador {
     public int getContador() {
         return cnt;
     }
-    
-    public void modCont(){
+
+    public void modCont() {
         --cnt;
     }
 
