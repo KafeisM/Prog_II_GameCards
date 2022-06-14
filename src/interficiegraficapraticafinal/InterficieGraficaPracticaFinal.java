@@ -318,7 +318,7 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
                 }
                 tornJugs = 0;
                 torn = true;
-                pi.botonTornJug.setVisible(false);
+                pi.botonTornJug.setVisible(false);               
                 pi.botonPasar.setVisible(true);
 
                 break;

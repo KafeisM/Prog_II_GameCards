@@ -9,9 +9,11 @@ package interficiegraficapraticafinal;
  * @author jordi
  */
 public class Joc {
-    
-    private static Carta ca;
-    
+
+    private static Carta darreracarta;
+    private static Boolean colocada = false;
+    private static Boolean aux = false;
+
     //arrays de les cartes del joc (una per palo)
     private static Carta[] jocClubs;
     private static boolean[] ocupadaClubs;
@@ -25,8 +27,7 @@ public class Joc {
     private static Carta[] jocHearts;
     private static boolean[] ocupadaHearts;
 
-    private static Boolean colocada = false;
-    private static Boolean aux = false;
+  
 
     public Joc() {
         jocClubs = new Carta[13];
@@ -55,9 +56,10 @@ public class Joc {
 
             selecionarPalo(pal, valor, munt, c);
         }
-
+        
+        //la variable aux ens diu si un jugador (maquina) ha pasat el seu torn
+        //es a dir no ha colocat cap carta
         if (!colocada) {
-            System.out.println("no se ha colocat cap carta");
             aux = true;
         } else {
             aux = false;
@@ -104,11 +106,9 @@ public class Joc {
             Ocupada[6] = true;
             munt.modCont();
             colocada = true;
-            System.out.println("Se ha colocat " + c);
-            ca = c;
+            darreracarta = c;
             return;
         } else {
-            //si entra al else
             for (int j = 0; j < Joc.length; j++) {
                 if ((j != 0) && (j != 12)) {
                     //si la posicio anterior esta lliure
@@ -118,11 +118,10 @@ public class Joc {
                             Ocupada[j - 1] = true;
                             munt.modCont();
                             colocada = true;
-                            System.out.println("Se ha colocat " + c);
-                            ca = c;
+                            darreracarta = c;
                             return;
                         }
-                    } 
+                    }
                     //si la posicio posterior esta lliure
                     if ((Ocupada[j] == true) && (Ocupada[j + 1] == false)) {
                         //no entra a este if 
@@ -132,8 +131,7 @@ public class Joc {
                             Ocupada[j + 1] = true;
                             munt.modCont();
                             colocada = true;
-                            System.out.println("Se ha colocat " + c);
-                            ca = c;
+                            darreracarta = c;
                             return;
                         }
                     }
@@ -143,9 +141,9 @@ public class Joc {
         }
 
     }
-    
-    public static Carta devolverCartaColocada(){
-        return ca;
+
+    public static Carta devolverCartaColocada() {
+        return darreracarta;
     }
 
     public static Boolean getColocada() {
@@ -167,8 +165,8 @@ public class Joc {
     public static Carta[] getJocHearts() {
         return jocHearts;
     }
-    
-    public static void resetColocada(){
+
+    public static void resetColocada() {
         colocada = false;
     }
 
