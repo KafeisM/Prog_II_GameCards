@@ -31,6 +31,13 @@ public class panelSuperior extends JPanel{
             }
     }
     
+        //esborra la casella
+    public void modCasella(int j) {
+        Color col = new Color(32,79,18);
+        Rectangle2D.Float ra = new Rectangle2D.Float(j*BASE + 220 + (j*220), ALTURA, BASE, ALTURA);
+        Casella aux = new Casella(ra, col);
+        visu[j] = aux;
+    }
     
         @Override
     public void paintComponent(Graphics g){

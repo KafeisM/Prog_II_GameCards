@@ -6,6 +6,7 @@ package interficiegraficapraticafinal;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -69,19 +70,19 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
         etiqJug1.setForeground(Color.white);
         etiqJug1.setFont(new java.awt.Font("Arial", Font.ITALIC + Font.BOLD, 60));
         this.add(etiqJug1);
-        etiqJug1.setBounds(255, 15, 1200 / 13, 450 / 4);
+        etiqJug1.setBounds(245, 15, 1200 / 13, 450 / 4);
 
         etiqJug2.setText("0");
         etiqJug2.setForeground(Color.white);
         etiqJug2.setFont(new java.awt.Font("Arial", Font.ITALIC + Font.BOLD, 60));
         this.add(etiqJug2);
-        etiqJug2.setBounds(570, 15, 1200 / 13, 450 / 4);
+        etiqJug2.setBounds(555, 15, 1200 / 13, 450 / 4);
 
         etiqJug3.setText("0");
         etiqJug3.setForeground(Color.white);
         etiqJug3.setFont(new java.awt.Font("Arial", Font.ITALIC + Font.BOLD, 60));
         this.add(etiqJug3);
-        etiqJug3.setBounds(880, 15, 1200 / 13, 450 / 4);
+        etiqJug3.setBounds(865, 15, 1200 / 13, 450 / 4);
 
         //afegim el panell superior amb les caselles
         this.add(ps);
@@ -187,7 +188,7 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
         ponerFotosMezcladas();
         taulerM.setVisible(true);
         pi.botonJugar.setEnabled(true);
-        pi.botonJugar.setBackground(Color.BLUE);
+        pi.botonJugar.setBackground(Color.CYAN);
         pi.botonReiniciar.setEnabled(true);
         pi.textoInf.setText("La baralla està mesclada");
     }
@@ -202,6 +203,9 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
         taulerJoc.setVisible(false);
         pi.botonMesclar.setVisible(true);
         pi.botonJugar.setText("Jugar");
+        pi.botonPasar.setVisible(false);
+        pi.botonJugar.setVisible(true);
+        pi.botonJugar.setBackground(Color.LIGHT_GRAY);
 
         //reiniciar munts de jugadors
         jug1 = new Jugador();
@@ -209,25 +213,39 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
         jug3 = new Jugador();
         jug4 = new Jugador();
 
+        //reiniciar el tauler
+        for(int i = 0; i < 4; i++){
+            for(int j = 0; j < 13; j++){
+                taulerJoc.reiniciarTauler(i, j);
+            }
+        }
+        taulerJoc.setVisible(false);
+        
+        //resetear torn
+        torn = true;
+        tornJugs = 0;
+        
         //reinicair punts
         int puntosJug1 = jug2.getContador();
         etiqJug1.setText(Integer.toString(puntosJug1));
-        etiqJug1.setBounds(250, 15, 1200 / 13, 450 / 4);
+        //etiqJug1.setBounds(250, 15, 1200 / 13, 450 / 4);
         int puntosJug2 = jug3.getContador();
         etiqJug2.setText(Integer.toString(puntosJug2));
-        etiqJug2.setBounds(565, 15, 1200 / 13, 450 / 4);
+        //etiqJug2.setBounds(565, 15, 1200 / 13, 450 / 4);
         int puntosJug3 = jug4.getContador();
         etiqJug3.setText(Integer.toString(puntosJug3));
-        etiqJug3.setBounds(875, 15, 1200 / 13, 450 / 4);
+        //etiqJug3.setBounds(875, 15, 1200 / 13, 450 / 4);
         int puntosPropios = jug1.getContador();
         etiqPropia.setText(Integer.toString(puntosPropios));
 
+        //llevar foto carta girada
+        for(int i = 0; i <3; i++){
+            ps.modCasella(i);
+        }
+        
         haGuanyat = false;
         tj = new Joc();
 
-        taulerJoc = new Tablero();
-        taulerJoc.setBounds(0, 140, 1200, 500);
-        taulerJoc.setVisible(false);
 
     }
 
@@ -236,6 +254,7 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
         pi.botonPasar.setVisible(false);
         pi.botonTornJug.setVisible(true);
         comprovarJoc();
+        pi.textoInf.setText("Has passat");
     }
 
     private void comprovarJoc() {
@@ -262,7 +281,7 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
 
         switch (tornJugs) {
             case 0:
-                pi.textoInf.setText("Torn del Jugador 1");
+                pi.textoInf.setText("Torn del Jugador 1"); 
                 tj.jugar(jug2);
                 mostrarEstadoPartida();
                 puntosJug1 = jug2.getContador();
@@ -391,6 +410,16 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
                 taulerJoc.Posa(fila4[i], 3, i);
             }
         }
+        //if (tj.getColocada()){
+        pi.textoInf.setText("S'ha colocat la carta: " + tj.devolverCartaColocada());  
+        if (tj.getAux()){
+            pi.textoInf.setText("El jugador ha passat");
+        }
+        //} /*else {
+            //pi.textoInf.setText("El jugador ha passat");
+        //}*/
+        
+        
         this.repaint();
     }
 
@@ -414,13 +443,10 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
         }
         int puntosJug1 = jug2.getContador();
         etiqJug1.setText(Integer.toString(puntosJug1));
-        etiqJug1.setBounds(250, 15, 1200 / 13, 450 / 4);
         int puntosJug2 = jug3.getContador();
         etiqJug2.setText(Integer.toString(puntosJug2));
-        etiqJug2.setBounds(565, 15, 1200 / 13, 450 / 4);
         int puntosJug3 = jug4.getContador();
         etiqJug3.setText(Integer.toString(puntosJug3));
-        etiqJug3.setBounds(875, 15, 1200 / 13, 450 / 4);
         int puntosPropios = jug1.getContador();
         etiqPropia.setText(Integer.toString(puntosPropios));
         pi.textoInf.setText("Les cartes estàn repartides, és el teu torn, posa un 7 si el tens");
@@ -502,6 +528,8 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
                     pi.botonTornJug.setVisible(true);
                     torn = false;
                     tj.resetColocada();
+                } else {
+                    Toolkit.getDefaultToolkit().beep();
                 }
             }
 

@@ -51,7 +51,7 @@ public class panelInferior extends JPanel {
         
         botonTornJug.setText("Torn del jugador");
         this.add(botonTornJug);
-        botonTornJug.setBounds(550, 5, 100, 20);
+        botonTornJug.setBounds(500, 5, 150, 20);
         botonTornJug.setVisible(false);
 
         textoInf.setText("Abans de jugar cal barallar!");

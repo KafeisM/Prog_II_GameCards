@@ -9,7 +9,9 @@ package interficiegraficapraticafinal;
  * @author Usuario
  */
 public class Joc {
-
+    
+    private static Carta ca;
+    
     //arrays de les cartes del joc (una per palo)
     private static Carta[] jocClubs;
     private static boolean[] ocupadaClubs;
@@ -24,6 +26,7 @@ public class Joc {
     private static boolean[] ocupadaHearts;
 
     private static Boolean colocada = false;
+    private static Boolean aux = false;
 
     public Joc() {
         jocClubs = new Carta[13];
@@ -55,9 +58,9 @@ public class Joc {
 
         if (!colocada) {
             System.out.println("no se ha colocat cap carta");
-        }
-        if(c == null){
-            System.out.println("error");
+            aux = true;
+        } else {
+            aux = false;
         }
 
         colocada = false;
@@ -102,6 +105,7 @@ public class Joc {
             munt.modCont();
             colocada = true;
             System.out.println("Se ha colocat " + c);
+            ca = c;
             return;
         } else {
             //si entra al else
@@ -115,6 +119,7 @@ public class Joc {
                             munt.modCont();
                             colocada = true;
                             System.out.println("Se ha colocat " + c);
+                            ca = c;
                             return;
                         }
                     } 
@@ -128,6 +133,7 @@ public class Joc {
                             munt.modCont();
                             colocada = true;
                             System.out.println("Se ha colocat " + c);
+                            ca = c;
                             return;
                         }
                     }
@@ -136,6 +142,10 @@ public class Joc {
             }
         }
 
+    }
+    
+    public static Carta devolverCartaColocada(){
+        return ca;
     }
 
     public static Boolean getColocada() {
@@ -160,6 +170,10 @@ public class Joc {
     
     public static void resetColocada(){
         colocada = false;
+    }
+
+    public static Boolean getAux() {
+        return aux;
     }
 
 }

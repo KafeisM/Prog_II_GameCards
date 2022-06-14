@@ -26,6 +26,13 @@ public class Tablero extends JPanel{
             }
         }
     }
+           //esborra la casella
+    public void reiniciarTauler(int i ,int j) {
+        Color col = new Color(32,79,18);
+        Rectangle2D.Float ra = new Rectangle2D.Float(j*BASE, i*ALTURA, BASE, ALTURA);
+        Casella aux = new Casella(ra, col);
+        tauler[i][j] = aux;
+    }
     
     @Override
     public void paintComponent(Graphics g){
