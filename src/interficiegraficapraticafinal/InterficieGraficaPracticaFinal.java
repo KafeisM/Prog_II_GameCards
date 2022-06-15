@@ -22,7 +22,7 @@ import javax.swing.JOptionPane;
  */
 public class InterficieGraficaPracticaFinal extends JFrame implements MouseListener, ActionListener {
 
-    private Baralla baraja = generarBaralla();
+    private Baralla baralla = generarBaralla();
     private Jugador jug1 = new Jugador();
     private Jugador jug2 = new Jugador();
     private Jugador jug3 = new Jugador();
@@ -92,7 +92,7 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
         pi.setBounds(0, 750, 1200, 50);
 
         //posam les fotos de la baralla ordenada i afegim el tauler inicial
-        ponerFotosOrden();
+        posarCartesOrdre();
         this.add(tauler);
         tauler.setBounds(0, 140, 1200, 500);
 
@@ -162,21 +162,21 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
 
     }
 
-    private void ponerFotosOrden() {
+    private void posarCartesOrdre() {
         for (int j = 0; j < 13; j++) {
-            tauler.Posa(baraja.getCarta(j), 0, j);
+            tauler.Posa(baralla.getCarta(j), 0, j);
         }
 
         for (int j = 0; j < 13; j++) {
-            tauler.Posa(baraja.getCarta(j + 13), 1, j);
+            tauler.Posa(baralla.getCarta(j + 13), 1, j);
         }
 
         for (int j = 0; j < 13; j++) {
-            tauler.Posa(baraja.getCarta(j + 26), 2, j);
+            tauler.Posa(baralla.getCarta(j + 26), 2, j);
         }
 
         for (int j = 0; j < 13; j++) {
-            tauler.Posa(baraja.getCarta(j + 39), 3, j);
+            tauler.Posa(baralla.getCarta(j + 39), 3, j);
         }
 
     }
@@ -184,7 +184,7 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
     //accio de mesclar la baralla, tambe se activara la opcio de iniciar el joc i reiniciar
     private void botonMesclar(java.awt.event.ActionEvent e) {
         tauler.setVisible(false);
-        baraja.mesclar();
+        baralla.mesclar();
         ponerFotosMezcladas();
         taulerM.setVisible(true);
         pi.botonJugar.setEnabled(true);
@@ -339,19 +339,19 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
 
     private void ponerFotosMezcladas() {
         for (int j = 0; j < 13; j++) {
-            taulerM.Posa(baraja.getCarta(j), 0, j);
+            taulerM.Posa(baralla.getCarta(j), 0, j);
         }
 
         for (int j = 0; j < 13; j++) {
-            taulerM.Posa(baraja.getCarta(j + 13), 1, j);
+            taulerM.Posa(baralla.getCarta(j + 13), 1, j);
         }
 
         for (int j = 0; j < 13; j++) {
-            taulerM.Posa(baraja.getCarta(j + 26), 2, j);
+            taulerM.Posa(baralla.getCarta(j + 26), 2, j);
         }
 
         for (int j = 0; j < 13; j++) {
-            taulerM.Posa(baraja.getCarta(j + 39), 3, j);
+            taulerM.Posa(baralla.getCarta(j + 39), 3, j);
         }
 
         this.repaint();
@@ -437,7 +437,7 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
         ImageIcon icono = null;
         Jugador[] jugadors = {jug1, jug2, jug3, jug4};
 
-        repartir(baraja, jugadors);
+        repartir(baralla, jugadors);
 
         for (int i = 0; i < 13; i++) {
             bv.Posa(jug1.agafarCarta(i), i);
@@ -463,6 +463,7 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
         pi.botonMesclar.setVisible(false);
         pi.botonJugar.setVisible(false);
         pi.botonPasar.setVisible(true);
+        pi.botonTornJug.setVisible(false);
 
     }
 
