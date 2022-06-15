@@ -9,13 +9,13 @@ import java.awt.Graphics;
 import java.awt.geom.Rectangle2D;
 import javax.swing.JPanel;
 
-public class Tablero extends JPanel{
+public class Tauler extends JPanel{
     
     private static final int BASE = 1200/13;
     private static final int ALTURA = 450/4;
     private Casella tauler[][];
     
-    public Tablero(){
+    public Tauler(){
         this.setSize(1200, 450);
         tauler = new Casella[4][13];
         Color col = new Color(32,79,18);
@@ -26,7 +26,8 @@ public class Tablero extends JPanel{
             }
         }
     }
-           //esborra la casella
+    
+    //esborra la casella
     public void reiniciarTauler(int i ,int j) {
         Color col = new Color(32,79,18);
         Rectangle2D.Float ra = new Rectangle2D.Float(j*BASE, i*ALTURA, BASE, ALTURA);

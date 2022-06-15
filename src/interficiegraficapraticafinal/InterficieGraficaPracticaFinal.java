@@ -32,15 +32,18 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
     private Boolean torn = true;
     private int tornJugs = 0;
     private ImageIcon icono = null;
+    
     //declaració de els diferents taulers 
-    private Tablero tauler = new Tablero();
-    private Tablero taulerM = new Tablero();
-    private Tablero taulerJoc = new Tablero();
+    private Tauler tauler = new Tauler();
+    private Tauler taulerM = new Tauler();
+    private Tauler taulerJoc = new Tauler();
+    
     //declaració de els panells
     private panelInferior pi = new panelInferior();
     private BarallaVisualizer bv = new BarallaVisualizer(13);
     private BarallaVisualizer bv2 = new BarallaVisualizer(1);
     private panelSuperior ps = new panelSuperior();
+    
     //declaració de les etiquetes per les puntuacions
     private JLabel etiqJug1 = new JLabel();
     private JLabel etiqJug2 = new JLabel();
@@ -162,30 +165,55 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
 
     }
 
-    private void posarCartesOrdre() {
-        for (int j = 0; j < 13; j++) {
-            tauler.Posa(baralla.getCarta(j), 0, j);
+    // ACCIONS BOTONS
+    
+    //inicia una partida 
+    private void botonJugar(java.awt.event.ActionEvent e) {
+
+        ImageIcon icono = null;
+        Jugador[] jugadors = {jug1, jug2, jug3, jug4};
+
+        //reparteix la baralla
+        repartir(baralla, jugadors);
+
+        //mostra la teva baralla visualment
+        for (int i = 0; i < 13; i++) {
+            bv.Posa(jug1.agafarCarta(i), i);
         }
 
-        for (int j = 0; j < 13; j++) {
-            tauler.Posa(baralla.getCarta(j + 13), 1, j);
+        //colocar les cartes girades dels jugadors
+        Carta cartaGirada = new Carta(1, Palo.DIAMONDS, "Cartes/card_back_blue.png");
+        bv.setVisible(true);
+        taulerM.setVisible(false);
+        taulerJoc.setVisible(true);
+        for (int i = 0; i < 3; i++) {
+            ps.Posa(cartaGirada, i);
         }
+        
+        //inicialitzacio de punts
+        int puntosJug1 = jug2.getContador();
+        etiqJug1.setText(Integer.toString(puntosJug1));
+        int puntosJug2 = jug3.getContador();
+        etiqJug2.setText(Integer.toString(puntosJug2));
+        int puntosJug3 = jug4.getContador();
+        etiqJug3.setText(Integer.toString(puntosJug3));
+        int puntosPropios = jug1.getContador();
+        etiqPropia.setText(Integer.toString(puntosPropios));
+        pi.textoInf.setText("Les cartes estàn repartides, és el teu torn, posa un 7 si el tens");
 
-        for (int j = 0; j < 13; j++) {
-            tauler.Posa(baralla.getCarta(j + 26), 2, j);
-        }
-
-        for (int j = 0; j < 13; j++) {
-            tauler.Posa(baralla.getCarta(j + 39), 3, j);
-        }
+        //actualitazió de botons
+        pi.botonMesclar.setVisible(false);
+        pi.botonJugar.setVisible(false);
+        pi.botonPasar.setVisible(true);
+        pi.botonTornJug.setVisible(false);
 
     }
-
+    
     //accio de mesclar la baralla, tambe se activara la opcio de iniciar el joc i reiniciar
     private void botonMesclar(java.awt.event.ActionEvent e) {
         tauler.setVisible(false);
         baralla.mesclar();
-        ponerFotosMezcladas();
+        posarCartesMeclades();
         taulerM.setVisible(true);
         pi.botonJugar.setEnabled(true);
         pi.botonJugar.setBackground(Color.CYAN);
@@ -249,6 +277,7 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
 
     }
 
+    //pasa un torn del usuari
     private void botonPasar(java.awt.event.ActionEvent e) {
         torn = false;
         pi.botonPasar.setVisible(false);
@@ -256,21 +285,9 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
         comprovarJoc();
         pi.textoInf.setText("Has passat");
     }
-
-    private void comprovarJoc() {
-        int puntosPropios = jug1.getContador();
-        etiqPropia.setText(Integer.toString(puntosPropios));
-        if (jug1.getContador() == 0) {
-            haGuanyat = true;
-            icono = new ImageIcon("Cartes/Jug0Riu.png");
-            JOptionPane.showMessageDialog(null, "HAS GUANYAT! ", "Final de partida", JOptionPane.INFORMATION_MESSAGE, icono);
-            //habilitar nomes el boto de reiniciar
-            pi.botonPasar.setEnabled(false);
-            pi.botonTornJug.setEnabled(false);
-            pi.botonReiniciar.setBackground(Color.CYAN);
-        }
-    }
-
+    
+    
+    
     private void botonTornJug(java.awt.event.ActionEvent e) {
 
         int puntosJug1 = jug2.getContador();
@@ -284,7 +301,7 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
             case 0:
                 pi.textoInf.setText("Torn del Jugador 1");
                 tj.jugar(jug2);
-                mostrarEstadoPartida(1);
+                mostrarEstatPartida(1);
                 puntosJug1 = jug2.getContador();
                 etiqJug1.setText(Integer.toString(puntosJug1));
                 if (jug2.getContador() == 0) {
@@ -298,7 +315,7 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
             case 1:
                 pi.textoInf.setText("Torn del Jugador 2");
                 tj.jugar(jug3);
-                mostrarEstadoPartida(2);
+                mostrarEstatPartida(2);
                 puntosJug2 = jug3.getContador();
                 etiqJug2.setText(Integer.toString(puntosJug2));
                 if (jug3.getContador() == 0) {
@@ -312,7 +329,7 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
             case 2:
                 pi.textoInf.setText("Torn del Jugador 3");
                 tj.jugar(jug4);
-                mostrarEstadoPartida(3);
+                mostrarEstatPartida(3);
                 puntosJug3 = jug4.getContador();
                 etiqJug3.setText(Integer.toString(puntosJug3));
                 if (jug4.getContador() == 0) {
@@ -320,7 +337,9 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
                     icono = new ImageIcon("Cartes/Jug3Riu.png");
                     JOptionPane.showMessageDialog(null, "HA GUANYAT EL JUGADOR 3! ", "Final de partida", JOptionPane.INFORMATION_MESSAGE, icono);
                 }
+                
                 tornJugs = 0;
+                
                 torn = true;
                 pi.botonTornJug.setVisible(false);               
                 pi.botonPasar.setVisible(true);
@@ -336,8 +355,30 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
         }
 
     }
+    
+    //Colocació de cartes al tauler tant al principi com mescaldes (Hi ha 2 taulers realment)
+    
+    private void posarCartesOrdre() {
+        for (int j = 0; j < 13; j++) {
+            tauler.Posa(baralla.getCarta(j), 0, j);
+        }
 
-    private void ponerFotosMezcladas() {
+        for (int j = 0; j < 13; j++) {
+            tauler.Posa(baralla.getCarta(j + 13), 1, j);
+        }
+
+        for (int j = 0; j < 13; j++) {
+            tauler.Posa(baralla.getCarta(j + 26), 2, j);
+        }
+
+        for (int j = 0; j < 13; j++) {
+            tauler.Posa(baralla.getCarta(j + 39), 3, j);
+        }
+        
+
+    }
+
+    private void posarCartesMeclades() {
         for (int j = 0; j < 13; j++) {
             taulerM.Posa(baralla.getCarta(j), 0, j);
         }
@@ -356,45 +397,14 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
 
         this.repaint();
     }
-
-    private static void repartir(Baralla bar, Jugador[] jug) {
-        int carta;
-        int numJug = 4;
-        int numCartes = 13;
-
-        for (int i = 1; i <= numJug; i++) {
-
-            for (int j = 0; j < numCartes; j++) {
-
-                switch (i) {
-                    case 1:
-                        jug[0].setMunt(bar.repartir(j));
-                        break;
-                    case 2:
-                        carta = j + 13;
-                        jug[1].setMunt(bar.repartir(carta));
-                        break;
-                    case 3:
-                        carta = j + 26;
-                        jug[2].setMunt(bar.repartir(carta));
-                        break;
-                    case 4:
-                        carta = j + 39;
-                        jug[3].setMunt(bar.repartir(carta));
-                        break;
-                }
-
-            }
-        }
-
-    }
-
-    private void mostrarEstadoPartida(int jug) {
+    
+    private void mostrarEstatPartida(int jug) {
         Carta[] fila1 = tj.getJocClubs();
         Carta[] fila2 = tj.getJocDiamonds();
         Carta[] fila3 = tj.getJocHearts();
         Carta[] fila4 = tj.getJocSpades();
-
+        
+        //actualitza el tauler de joc graficament despres de cada jugada
         for (int i = 0; i < 13; i++) {
             if (fila1[i] != null) {
                 taulerJoc.Posa(fila1[i], 0, i);
@@ -431,39 +441,38 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
 
         this.repaint();
     }
+    
+    
+    //Metodes logica joc
+    private static void repartir(Baralla bar, Jugador[] jug) {
+        int carta;
+        int numJug = 4;
+        int numCartes = 13;
 
-    private void botonJugar(java.awt.event.ActionEvent e) {
+        for (int i = 1; i <= numJug; i++) {
 
-        ImageIcon icono = null;
-        Jugador[] jugadors = {jug1, jug2, jug3, jug4};
+            for (int j = 0; j < numCartes; j++) {
 
-        repartir(baralla, jugadors);
+                switch (i) {
+                    case 1:
+                        jug[0].setMunt(bar.repartir(j));
+                        break;
+                    case 2:
+                        carta = j + 13;
+                        jug[1].setMunt(bar.repartir(carta));
+                        break;
+                    case 3:
+                        carta = j + 26;
+                        jug[2].setMunt(bar.repartir(carta));
+                        break;
+                    case 4:
+                        carta = j + 39;
+                        jug[3].setMunt(bar.repartir(carta));
+                        break;
+                }
 
-        for (int i = 0; i < 13; i++) {
-            bv.Posa(jug1.agafarCarta(i), i);
+            }
         }
-
-        Carta cartaGirada = new Carta(1, Palo.DIAMONDS, "Cartes/card_back_blue.png");
-        bv.setVisible(true);
-        taulerM.setVisible(false);
-        taulerJoc.setVisible(true);
-        for (int i = 0; i < 3; i++) {
-            ps.Posa(cartaGirada, i);
-        }
-        int puntosJug1 = jug2.getContador();
-        etiqJug1.setText(Integer.toString(puntosJug1));
-        int puntosJug2 = jug3.getContador();
-        etiqJug2.setText(Integer.toString(puntosJug2));
-        int puntosJug3 = jug4.getContador();
-        etiqJug3.setText(Integer.toString(puntosJug3));
-        int puntosPropios = jug1.getContador();
-        etiqPropia.setText(Integer.toString(puntosPropios));
-        pi.textoInf.setText("Les cartes estàn repartides, és el teu torn, posa un 7 si el tens");
-
-        pi.botonMesclar.setVisible(false);
-        pi.botonJugar.setVisible(false);
-        pi.botonPasar.setVisible(true);
-        pi.botonTornJug.setVisible(false);
 
     }
 
@@ -519,6 +528,7 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
 
     }
 
+    //Interacció del usuari
     @Override
     public void mouseReleased(MouseEvent e) {
         try {
@@ -527,7 +537,7 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
                 Casella cas = bv.getCasella(posicio);
                 Carta c = cas.getCarta();
                 tj.colocarCarta(c, jug1);
-                mostrarEstadoPartida(0);
+                mostrarEstatPartida(0);
 
                 //comprovar si la carta ha estat colocada
                 if (tj.getColocada()) {
@@ -549,6 +559,7 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
 
     }
 
+    //retorna la posicio de la carta clickada
     private int retornarPos(MouseEvent e) {
         int x = 0, y = 0, i = 0;
         int aux1, aux2;
@@ -560,6 +571,21 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
         }
         i--;
         return i;
+    }
+    
+    //comprovar si hem guanyat i actualitazacio de punts
+     private void comprovarJoc() {
+        int puntosPropios = jug1.getContador();
+        etiqPropia.setText(Integer.toString(puntosPropios));
+        if (jug1.getContador() == 0) {
+            haGuanyat = true;
+            icono = new ImageIcon("Cartes/Jug0Riu.png");
+            JOptionPane.showMessageDialog(null, "HAS GUANYAT! ", "Final de partida", JOptionPane.INFORMATION_MESSAGE, icono);
+            //habilitar nomes el boto de reiniciar
+            pi.botonPasar.setEnabled(false);
+            pi.botonTornJug.setEnabled(false);
+            pi.botonReiniciar.setBackground(Color.CYAN);
+        }
     }
 
     @Override
