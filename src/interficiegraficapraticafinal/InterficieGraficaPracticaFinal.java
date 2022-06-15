@@ -229,6 +229,7 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
         tauler.setVisible(true);
         pi.botonJugar.setEnabled(false);
         pi.botonReiniciar.setEnabled(false);
+        pi.botonReiniciar.setBackground(Color.LIGHT_GRAY);
         pi.textoInf.setText("Abans de jugar cal barallar!");
         bv.setVisible(false);
         taulerJoc.setVisible(false);
