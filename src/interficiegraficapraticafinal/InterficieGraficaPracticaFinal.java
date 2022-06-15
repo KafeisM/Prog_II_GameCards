@@ -69,19 +69,19 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
         etiqJug1.setForeground(Color.white);
         etiqJug1.setFont(new java.awt.Font("Arial", Font.ITALIC + Font.BOLD, 60));
         this.add(etiqJug1);
-        etiqJug1.setBounds(245, 15, 1200 / 13, 450 / 4);
+        etiqJug1.setBounds(240, 15, 1200 / 13, 450 / 4);
 
         etiqJug2.setText("0");
         etiqJug2.setForeground(Color.white);
         etiqJug2.setFont(new java.awt.Font("Arial", Font.ITALIC + Font.BOLD, 60));
         this.add(etiqJug2);
-        etiqJug2.setBounds(555, 15, 1200 / 13, 450 / 4);
+        etiqJug2.setBounds(550, 15, 1200 / 13, 450 / 4);
 
         etiqJug3.setText("0");
         etiqJug3.setForeground(Color.white);
         etiqJug3.setFont(new java.awt.Font("Arial", Font.ITALIC + Font.BOLD, 60));
         this.add(etiqJug3);
-        etiqJug3.setBounds(865, 15, 1200 / 13, 450 / 4);
+        etiqJug3.setBounds(860, 15, 1200 / 13, 450 / 4);
 
         //afegim el panell superior amb les caselles
         this.add(ps);
@@ -264,6 +264,10 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
             haGuanyat = true;
             icono = new ImageIcon("Cartes/Jug0Riu.png");
             JOptionPane.showMessageDialog(null, "HAS GUANYAT! ", "Final de partida", JOptionPane.INFORMATION_MESSAGE, icono);
+            //habilitar nomes el boto de reiniciar
+            pi.botonPasar.setEnabled(false);
+            pi.botonTornJug.setEnabled(false);
+            pi.botonReiniciar.setBackground(Color.CYAN);
         }
     }
 
@@ -322,6 +326,13 @@ public class InterficieGraficaPracticaFinal extends JFrame implements MouseListe
                 pi.botonPasar.setVisible(true);
 
                 break;
+        }
+        
+        if(haGuanyat){
+            //habilitar nomes el boto de reiniciar
+            pi.botonPasar.setEnabled(false);
+            pi.botonTornJug.setEnabled(false);
+            pi.botonReiniciar.setBackground(Color.CYAN);
         }
 
     }
