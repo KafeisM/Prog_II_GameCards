@@ -18,7 +18,9 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author marcf
+ * @author marcf, jordi
+ * 
+ * link video: https://youtu.be/Gz5JhsnEEYg
  */
 public class InterficieGraficaPracticaFinal extends JFrame implements MouseListener, ActionListener {
 
